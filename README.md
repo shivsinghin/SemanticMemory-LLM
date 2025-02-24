@@ -1,20 +1,19 @@
-# Semantic Memory Enhanced AI Assistant 🤖
+# Semantic Memory For the Personal AI 🤖
 
 A context-aware AI assistant that builds semantic memory from conversations, enabling personalized and historically-informed responses.
 
 ## 🧠 System Architecture
 
-mermaid
 graph TD
-A[User Input] --> B[Express Server]
-B --> C[Vector Embedding]
-C --> D[(MongoDB)]
-D --> E[Semantic Search]
-E --> F[Context Building]
-F --> G[OpenAI LLM]
-G --> H[Response]
-H --> D
-H --> I[User Interface]
+    A[User Input] --> B(Express Server);
+    B --> C{Vector Embedding};
+    C --> D[MongoDB];
+    D --> E{Semantic Search};
+    E --> F[Context Building];
+    F --> G[OpenAI LLM];
+    G --> H[Response];
+    H --> D;
+    H --> I[User Interface];
 
 
 ## 🌟 Key Features
@@ -27,14 +26,12 @@ H --> I[User Interface]
 
 ### 2. Vector-Based Retrieval System
 
-mermaid
 flowchart LR
-A[New Message] --> B[Generate Embedding]
-B --> C[Vector Search]
-C --> D[Similar Conversations]
-D --> E[Context Building]
-E --> F[Enhanced Response]
-
+    A[New Message] --> B{Generate Embedding};
+    B --> C[Vector Search];
+    C --> D[Similar Conversations];
+    D --> E[Context Building];
+    E --> F[Enhanced Response];
 
 ### 3. Memory Architecture
 
@@ -48,19 +45,19 @@ E --> F[Enhanced Response]
 ## 💡 How It Works
 
 sequenceDiagram
-participant U as User
-participant S as Server
-participant V as Vector Engine
-participant DB as MongoDB
-participant AI as OpenAI LLM
-U->>S: Send Message
-S->>V: Generate Embedding
-V->>DB: Search Similar Conversations
-DB->>S: Return Relevant History
-S->>AI: Generate Response with Context
-AI->>S: Return Response
-S->>DB: Store Conversation + Embedding
-S->>U: Send Response
+    participant U as User
+    participant S as Server
+    participant V as Vector Engine
+    participant DB as MongoDB
+    participant AI as OpenAI LLM
+    U->>S: Send Message
+    S->>V: Generate Embedding
+    V->>DB: Search Similar Conversations
+    DB->>S: Return Relevant History
+    S->>AI: Generate Response with Context
+    AI->>S: Return Response
+    S->>DB: Store Conversation + Embedding
+    S->>U: Send Response
 
 
 ## 🔋 System Components
@@ -110,13 +107,6 @@ erDiagram
 - Index-based retrieval: Fast semantic search
 - Automatic data cleanup: Maintains system performance
 
-## 🔒 Security & Privacy
-
-- Environment variable configuration
-- Secure API key management
-- MongoDB authentication
-- CORS protection
-
 ## 🌐 System Requirements
 
 ### Dependencies
@@ -131,36 +121,8 @@ erDiagram
 - Server port settings
 - CORS configuration
 
-## 📈 Future Enhancements
+## 📬 Contact
 
-1. **Advanced Memory Management**
-   - Hierarchical memory organization
-   - Long-term knowledge distillation
-   - Dynamic context window sizing
-
-2. **Enhanced Search Capabilities**
-   - Multi-vector search
-   - Temporal awareness
-   - Concept clustering
-
-3. **Performance Optimization**
-   - Caching layer
-   - Batch processing
-   - Index optimization
-
-## 🎯 Use Cases
-
-1. **Personal Assistant**
-   - Remembers user preferences
-   - Maintains conversation context
-   - Provides personalized responses
-
-2. **Knowledge Base**
-   - Builds semantic knowledge graph
-   - Enables intelligent retrieval
-   - Maintains conversation history
-
-3. **Learning System**
-   - Adapts to user interaction patterns
-   - Improves response relevance
-   - Builds contextual awareness
+* Website: [shivsingh.com](https://shivsingh.com)
+* Email: hi@shivsingh.com
+* LinkedIn: [Shiv Singh](https://linkedin.com/in/shivsinghin)
