@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiv's Assistant</title>
+    
+    <!--===================================
+    External Resources
+    ===================================-->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!--===================================
+    CSS Styles
+    ===================================-->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f0f2f5;
+        }
+
+        #chat-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #chat-header {
+            background-color: #2196f3;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        #chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background-color: #e1f5fe;
+            align-self: flex-end;
+            color: #01579b;
+        }
+
+        .bot-message {
+            background-color: #f5f5f5;
+            align-self: flex-start;
+            color: #333;
+        }
+
+        #input-area {
+            display: flex;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        #send-button {
+            margin-left: 10px;
+            padding: 12px 20px;
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        #send-button:hover {
+            background-color: #1976d2;
+        }
+
+        /* Styling for code blocks */
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            color: #333;
+        }
+
+        /* Inline code */
+        p code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        /* Timestamp */
+        .timestamp {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!--===================================
+    Chat Interface HTML
+    ===================================-->
+    <div id="chat-container">
+        <div id="chat-header">Shiv's Assistant</div>
+        <div id="chat-messages"></div>
+        <div id="input-area">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <!--===================================
+    JavaScript Functions
+    ===================================-->
+    <script>
+        // DOM Elements
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+
+        // Message Display Functions
+        function addMessage(message, isUser, timestamp) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
+
+            let formattedMessage = formatMessage(message);
+
+            if (timestamp) {
+                const date = new Date(timestamp);
+                formattedMessage += `<div class="timestamp">${date.toLocaleString()}</div>`;
+            }
+
+            messageElement.innerHTML = formattedMessage;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Message Formatting Functions
+        function formatMessage(message) {
+            if (message === undefined || message === null) {
+                console.warn('Received undefined or null message');
+                return 'Error: Message content is missing';
+            }
+
+            message = String(message);
+
+            // Headings
+            message = message.replace(/^(#{1,6})\s(.*)$/gm, function(match, hashes, content) {
+                const level = hashes.length;
+                return `<h${level}>${content}</h${level}>`;
+            });
+
+            // Bold
+            message = message.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+            // Italic
+            message = message.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+            // Code blocks
+            message = message.replace(/```(\w+)?\n([\s\S]*?)```/g, function(match, language, code) {
+                return `<pre><code class="${language || ''}">${highlightCode(code, language)}</code></pre>`;
+            });
+
+            // Inline code
+            message = message.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+            // Line breaks
+            message = message.replace(/\n/g, '<br>');
+
+            return message;
+        }
+
+        function highlightCode(code, language) {
+            // Basic syntax highlighting
+            code = code.replace(/\b(function|return|if|for|while|var|let|const)\b/g, '<span class="keyword">$1</span>');
+            code = code.replace(/"([^"]*)"/g, '<span class="string">"$1"</span>');
+            code = code.replace(/\b(\d+)\b/g, '<span class="number">$1</span>');
+            code = code.replace(/\/\/.*/g, '<span class="comment">$&</span>');
+            return code;
+        }
+
+        // Chat Communication Functions
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                const timestamp = new Date().toISOString();
+                addMessage(message, true, timestamp);
+                userInput.value = '';
+
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const data = await response.json();
+                    addMessage(data.response, false, timestamp);
+                } catch (error) {
+                    console.error('Error:', error);
+                    addMessage('Sorry, there was an error processing your request.', false);
+                }
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        async function fetchChatHistory() {
+            try {
+                const response = await fetch('/chat-history');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch chat history');
+                }
+                const chatHistory = await response.json();
+                chatHistory.forEach(chat => {
+                    addMessage(chat.user, true, chat.timestamp);
+                    addMessage(chat.assistant, false, chat.timestamp);
+                });
+            } catch (error) {
+                console.error('Error fetching chat history:', error);
+                addMessage('Failed to load chat history.', false);
+            }
+        }
+
+        // Event Listeners
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Initialize Chat History
+        window.addEventListener('load', fetchChatHistory);
+    </script>
+</body>
+</html>
