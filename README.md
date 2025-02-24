@@ -4,6 +4,7 @@ A context-aware AI assistant that builds semantic memory from conversations, ena
 
 ## 🧠 System Architecture
 
+```mermaid
 graph TD
     A[User Input] --> B(Express Server);
     B --> C{Vector Embedding};
@@ -14,7 +15,7 @@ graph TD
     G --> H[Response];
     H --> D;
     H --> I[User Interface];
-
+```
 
 ## 🌟 Key Features
 
@@ -26,12 +27,14 @@ graph TD
 
 ### 2. Vector-Based Retrieval System
 
+```mermaid
 flowchart LR
     A[New Message] --> B{Generate Embedding};
     B --> C[Vector Search];
     C --> D[Similar Conversations];
     D --> E[Context Building];
     E --> F[Enhanced Response];
+```
 
 ### 3. Memory Architecture
 
@@ -44,6 +47,7 @@ flowchart LR
 
 ## 💡 How It Works
 
+```mermaid
 sequenceDiagram
     participant U as User
     participant S as Server
@@ -58,7 +62,7 @@ sequenceDiagram
     AI->>S: Return Response
     S->>DB: Store Conversation + Embedding
     S->>U: Send Response
-
+```
 
 ## 🔋 System Components
 
@@ -78,6 +82,7 @@ sequenceDiagram
 
 ### Storage Schema
 
+```mermaid
 erDiagram
     CONVERSATION {
         string user_message
@@ -85,7 +90,7 @@ erDiagram
         array vector_embedding
         date timestamp
     }
-
+```
 ### Vector Search Process
 1. Convert new message to vector embedding
 2. Search vector index for similar conversations
