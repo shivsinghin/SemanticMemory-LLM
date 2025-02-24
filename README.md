@@ -1,4 +1,4 @@
-# Semantic Memory For the Personal AI 🤖
+# long Term Semantic Memory For LLMs 🤖
 
 A context-aware AI assistant that builds semantic memory from conversations, enabling personalized and historically-informed responses.
 
